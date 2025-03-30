@@ -114,4 +114,3 @@ Application Structure For the projectask
 2. **Design Your UI**: Use Figma or another design tool to create wireframes for your pages.
 3. **Build the Backend**: Set up your Node.js server and MongoDB database.
 4. **Develop the Frontend**: Create React components for each page and integrate them with your backend.
-5. **

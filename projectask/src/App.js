@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // used for navigation
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -14,6 +16,7 @@ function App() {
       console.log('Email:', email);
       console.log('Password:', password);
       setError('');
+      navigate('/project-menu'); // navigate to ProjectMenu after successful login
     }
   };
 

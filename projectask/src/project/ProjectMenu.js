@@ -1,50 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
   Button,
   TextField,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
+  List,
+  ListItem,
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const ProjectCard = ({ header, subheader, title }) => (
-  <Card
-    sx={{
-      maxWidth: 280,
-      boxShadow: 3,
-      borderRadius: 2,
-      overflow: 'hidden',
-      '&:hover': {
-        boxShadow: 6,
-        transform: 'scale(1.05)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
-      },
-    }}
-  >
-    <CardContent>
-      <Typography variant="caption" color="text.secondary">
-        {subheader}
-      </Typography>
-      <CardMedia
-        component="img"
-        height="140"
-        image="https://via.placeholder.com/200"
-        alt="Project"
-        sx={{ my: 2 }}
-      />
-      <Typography variant="h6" fontWeight="bold">
-        {title}
-      </Typography>
-    </CardContent>
-  </Card>
-);
-
 const ProjectMenu = () => {
+  const [open, setOpen] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [members, setMembers] = useState('');
+  const [collaborators, setCollaborators] = useState('');
+  const [projects, setProjects] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setProjectName('');
+    setMembers('');
+    setCollaborators('');
+  };
+
+  const handleSubmit = () => {
+    if (!projectName.trim()) {
+      return;
+    }
+    const newProject = {
+      name: projectName,
+      members,
+      collaborators,
+      createdAt: new Date(),
+    };
+    setProjects((prevProjects) => [...prevProjects, newProject]);
+    handleClose();
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredProjects = projects.filter((project) =>
+    project.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       {/* Header and Search Section */}
@@ -64,10 +75,10 @@ const ProjectMenu = () => {
             label="Search Projects"
             variant="outlined"
             sx={{ mt: 2, width: 250 }}
-            InputLabelProps={{
-              style: { color: '#1976d2' },
-            }}
+            InputLabelProps={{ style: { color: '#1976d2' } }}
             fullWidth
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </Box>
         <Box textAlign="right" mt={{ xs: 3, sm: 0 }}>
@@ -81,27 +92,32 @@ const ProjectMenu = () => {
               backgroundColor: '#1976d2',
               '&:hover': { backgroundColor: '#1565c0' },
             }}
+            onClick={handleClickOpen}
           >
             Create Project
           </Button>
         </Box>
       </Box>
 
-      {/* Grid of Projects */}
-      <Grid container spacing={4} justifyContent="center">
-        <Grid item xs={12} sm={6} md={3}>
-          <ProjectCard subheader="Project 1" title="Project Task" />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <ProjectCard subheader="Project 2" title="Bold Title" />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <ProjectCard subheader="Project 3" title="Bold Header Title" />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <ProjectCard subheader="Project 4" title="Another Task" />
-        </Grid>
-      </Grid>
+      {/* Project List */}
+      <Box sx={{ p: 4 }}>
+        {filteredProjects.length === 0 ? (
+          <Typography variant="body1" color="text.secondary" textAlign="center">
+            No projects found.
+          </Typography>
+        ) : (
+          <List>
+            {filteredProjects.map((project, index) => (
+              <ListItem key={index} divider>
+                <ListItemText
+                  primary={project.name}
+                  secondary={`Created at: ${project.createdAt.toLocaleString()}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </Box>
 
       {/* View All Projects Button */}
       <Box textAlign="center" mt={4} p={4}>
@@ -113,6 +129,47 @@ const ProjectMenu = () => {
           View All Projects
         </Button>
       </Box>
+
+      {/* Dialog for creating a new project */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Create New Project</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Project Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Members"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={members}
+            onChange={(e) => setMembers(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Collaborators"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={collaborators}
+            onChange={(e) => setCollaborators(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

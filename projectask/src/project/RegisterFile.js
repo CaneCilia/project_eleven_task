@@ -20,7 +20,7 @@ function RegisterFile() {
       console.log('Registered Email:', email);
       console.log('Registered Password:', password);
       setError('');
-      navigate('/login'); // Navigate to login page after successful registration
+      navigate('/login');
     }
   };
 

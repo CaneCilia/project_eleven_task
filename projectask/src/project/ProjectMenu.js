@@ -13,19 +13,31 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const ProjectCard = ({ header, subheader, title }) => (
-  <Card sx={{ maxWidth: 200, p: 1 }}>
+  <Card
+    sx={{
+      maxWidth: 280,
+      boxShadow: 3,
+      borderRadius: 2,
+      overflow: 'hidden',
+      '&:hover': {
+        boxShadow: 6,
+        transform: 'scale(1.05)',
+        transition: 'transform 0.3s, box-shadow 0.3s',
+      },
+    }}
+  >
     <CardContent>
       <Typography variant="caption" color="text.secondary">
         {subheader}
       </Typography>
       <CardMedia
         component="img"
-        height="100"
-        image="https://via.placeholder.com/150"
+        height="140"
+        image="https://via.placeholder.com/200"
         alt="Project"
-        sx={{ my: 1 }}
+        sx={{ my: 2 }}
       />
-      <Typography variant="subtitle1" fontWeight="bold">
+      <Typography variant="h6" fontWeight="bold">
         {title}
       </Typography>
     </CardContent>
@@ -34,54 +46,74 @@ const ProjectCard = ({ header, subheader, title }) => (
 
 const ProjectMenu = () => {
   return (
-    <Box sx={{ p: 4 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" mb={4}>
+    <>
+      {/* Header and Search Section */}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+        mb={4}
+        sx={{ gap: 3, p: 4 }}
+      >
         <Box>
-          <Typography variant="h4" fontWeight="bold">
+          <Typography variant="h4" fontWeight="bold" color="primary.main">
             Project Menu
           </Typography>
           <TextField
-            label="Projects"
+            label="Search Projects"
             variant="outlined"
-            sx={{ mt: 2, width: 200 }}
+            sx={{ mt: 2, width: 250 }}
             InputLabelProps={{
-              style: { color: '#f44336' }, // Optional red underline
+              style: { color: '#1976d2' },
             }}
+            fullWidth
           />
         </Box>
         <Box textAlign="right" mt={{ xs: 3, sm: 0 }}>
-          <Typography>
-            Create your project in this Project Menu Board and craft your things to do and perform these even things!
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Create your project in this Project Menu Board and craft your things to do, then perform them!
           </Typography>
           <Button
             variant="contained"
             endIcon={<AddIcon />}
-            sx={{ mt: 2, backgroundColor: '#1976d2' }}
+            sx={{
+              backgroundColor: '#1976d2',
+              '&:hover': { backgroundColor: '#1565c0' },
+            }}
           >
             Create Project
           </Button>
         </Box>
       </Box>
 
-      <Grid container spacing={2}>
-        <Grid item>
+      {/* Grid of Projects */}
+      <Grid container spacing={4} justifyContent="center">
+        <Grid item xs={12} sm={6} md={3}>
           <ProjectCard subheader="Project 1" title="Project Task" />
         </Grid>
-        <Grid item>
-          <ProjectCard subheader="SUBHEADER" title="Bold Title" />
+        <Grid item xs={12} sm={6} md={3}>
+          <ProjectCard subheader="Project 2" title="Bold Title" />
         </Grid>
-        <Grid item>
-          <ProjectCard subheader="SUBHEADER" title="Bold Header Title" />
+        <Grid item xs={12} sm={6} md={3}>
+          <ProjectCard subheader="Project 3" title="Bold Header Title" />
         </Grid>
-        <Grid item>
-          <ProjectCard subheader="SUBHEADER" title="Bold Title" />
+        <Grid item xs={12} sm={6} md={3}>
+          <ProjectCard subheader="Project 4" title="Another Task" />
         </Grid>
       </Grid>
 
-      <Box mt={3}>
-        
+      {/* View All Projects Button */}
+      <Box textAlign="center" mt={4} p={4}>
+        <Button
+          variant="outlined"
+          endIcon={<ArrowForwardIosIcon />}
+          sx={{ fontWeight: 'bold', borderColor: '#1976d2', color: '#1976d2' }}
+        >
+          View All Projects
+        </Button>
       </Box>
-    </Box>
+    </>
   );
 };
 
